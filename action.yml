@@ -1,0 +1,25 @@
+name: 'Git Actions'
+description: 'Git Actions for tag, release and issue'
+inputs:
+  context:
+    description: 'Gitea context'
+    default: ${{ toJson(gitea) }}
+  repository:
+    description: 'Repository name with owner. For example, actions/checkout'
+    default: ${{ gitea.repository }}
+  ref:
+    description: 'The branch to update the package.'
+    default: ${{ gitea.event.pull_request.head.ref }}
+  token:
+    description: 'token'
+    default: ${{ gitea.token }}
+  type:
+    description: 'Allowed values: tag, issue, release.'
+  commands:
+    description: 'Allowed values: create, close, set.'
+outputs:
+  result: 
+    description: 'A boolean value to indicate if a update was successful.'
+runs:
+  using: 'node22'
+  main: 'dist/index.js'
