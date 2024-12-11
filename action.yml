@@ -17,7 +17,7 @@ inputs:
     description: 'Allowed values: issues [close], release [create], milestone [create | close]'
 outputs:
   result: 
-    description: 'A boolean value to indicate if a update was successful.'
+    description: ''
 runs:
   using: 'node20'
   main: 'index.js'
