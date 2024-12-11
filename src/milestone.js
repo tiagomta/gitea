@@ -1,18 +1,19 @@
-import * as core from "@actions/core";
-import { exec } from "@actions/exec";
 
-class Milestone {
-    #context = JSON.parse(core.getInput("context"));
-    #token = core.getInput("token");
-    #prNumber = core.getInput("pr_number");
+function main(options, action, ...args) {
+  if (!actions[action]) throw new Error(`Unknown issues action: ${action}`);
+  return actions[action](options, ...args);
+}
 
+export default main;
+
+const actions = {
     async create(options, milestone) {
         if (!milestone) throw new Error("No milestone specified");
-        const api = `${this.#context.api_url}/repos/${this.#context.repository}`;
+        const api = `${context.api_url}/repos/${context.repository}`;
         let response = await fetch(`${api}/milestones`, {
           method: "POST",
           headers: {
-            Authorization: `token ${this.#token}`,
+            Authorization: `token ${token}`,
             "Content-Type": "application/json",
           },
           body: JSON.stringify({ title: milestone }),
@@ -22,10 +23,10 @@ class Milestone {
 
         milestone = await response.json();
         if (options.linkPR) {
-            response = await fetch(`${api}/pulls/${this.#prNumber}`, {
+            response = await fetch(`${api}/pulls/${context.event.pull_request.number}`, {
                 method: "PATCH",
                 headers: {
-                    Authorization: `token ${this.#token}`,
+                    Authorization: `token ${token}`,
                     "Content-Type": "application/json",
                 },
                 body: JSON.stringify({ title, milestone: milestone.id }),
@@ -36,14 +37,13 @@ class Milestone {
         }
       
         return milestone;
-    }
-
+    },
     async close(_, milestone) {
         if (!milestone) throw new Error("No milestone specified");
-        const response = await fetch(`${this.#context.api_url}/repos/${this.#context.repository}/milestones/${milestone}`, {
+        const response = await fetch(`${context.api_url}/repos/${repository}/milestones/${milestone}`, {
           method: "PATCH",
           headers: {
-            Authorization: this.#token,
+            Authorization: token,
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
@@ -58,9 +58,3 @@ class Milestone {
         return true;
     }
 }
-
-const milestone = new Milestone();
-
-export default milestone;
-
-/**/

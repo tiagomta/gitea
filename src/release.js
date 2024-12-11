@@ -1,15 +1,13 @@
-import * as core from "@actions/core";
 
-class Release {
-    #context = JSON.parse(core.getInput("context"));
-    #token = core.getInput("token");
-    #ref = core.getInput("ref");
+function main(options, action, ...args) {
+  if (!actions[action]) throw new Error(`Unknown issues action: ${action}`);
+  return actions[action](options, ...args);
+}
 
+export default main;
+
+const actions = {
     async create(options, ...args) {
         console.log(options, args);
     }
 }
-
-const release = new Release();
-
-export default release;
