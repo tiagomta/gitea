@@ -2,21 +2,19 @@ name: 'Git Actions'
 description: 'Git Actions for issues, releases and issues'
 inputs:
   context:
-    description: 'Gitea context'
-    default: ${{ toJson(gitea) }}
+    description: 'Git context'
+    default: ${{ toJson(github) }}
   repository:
     description: 'Repository name with owner. For example, actions/checkout'
-    default: ${{ gitea.repository }}
+    default: ${{ github.repository }}
   ref:
     description: 'The branch to update the package.'
-    default: ${{ gitea.event.pull_request.head.ref }}
+    default: ${{ github.event.pull_request.head.ref }}
   token:
-    description: 'token'
-    default: ${{ gitea.token }}
+    description: 'Git Token'
+    default: ${{ github.token }}
   command:
     description: 'Allowed values: issues [close], release [create], milestone [create | close]'
-  args:
-    description: 'Arguments for the command.'
 outputs:
   result: 
     description: 'A boolean value to indicate if a update was successful.'
