@@ -14,7 +14,7 @@ inputs:
     description: 'token'
     default: ${{ gitea.token }}
   command:
-    description: 'Allowed values: issues [close], release'
+    description: 'Allowed values: issues [close], release [create], milestone [create | close]'
   args:
     description: 'Arguments for the command.'
 outputs:
