@@ -5,7 +5,7 @@
   "main": "index.js",
   "type":"module",
   "scripts": {
-    "build": "esbuild src/index.js --bundle --platform=node --format=esm --outfile=index.js"
+    "build": "esbuild src/index.js --bundle --platform=node --format=iife --outfile=index.js"
   },
   "author": "",
   "license": "ISC",
