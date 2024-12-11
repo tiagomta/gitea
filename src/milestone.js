@@ -20,7 +20,7 @@ class Milestone {
       
         if (!response.ok) throw new Error(`Error creating milestone: ${response.statusText}`);
 
-        const milestone = await response.json();
+        milestone = await response.json();
         if (options.linkPR) {
             response = await fetch(`${api}/pulls/${this.#prNumber}`, {
                 method: "PATCH",

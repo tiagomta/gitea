@@ -14,5 +14,5 @@ try {
     if (result instanceof Promise) await result;
     core.setOutput("result", true);
 } catch (error) {
-  core.setFailed(error.message);
+    core.setFailed(error.message);
 }
