@@ -1,0 +1,35 @@
+name: Action Build
+on:
+  push:
+    branches:    
+      - master
+jobs:
+  Build:
+    runs-on: ubuntu-latest
+    container:
+      image: node:latest
+    steps:
+      -
+        name: checkout
+        uses: actions/checkout@v4
+      - 
+        name: Setup Node
+        run: npm i
+      - 
+        name: Build
+        run: npm run build
+      - 
+        name: Cleanup
+        run: rm -rf src/* package-lock.json
+      -
+        name: Tag
+        run: |
+          VERSION=$(node -p "require('./package.json').version.split('.')[0]")
+          git config user.email "devops@vistta.org"
+          git config user.name "devops"
+          git add .
+          git commit -m "v$VERSION"
+          git tag -f "v$VERSION"
+          git push origin --delete "v$VERSION" || true
+          git push origin "v$VERSION"
+          echo "Tagged v$VERSION"
