@@ -9,7 +9,7 @@ export default main;
 const actions = {
     async create(options, milestone) {
         if (!milestone) throw new Error("No milestone specified");
-        const api = `${context.api_url}/repos/${context.repository}`;
+        const api = `${context.api_url}/repos/${repository}`;
         let response = await fetch(`${api}/milestones`, {
           method: "POST",
           headers: {
@@ -43,7 +43,7 @@ const actions = {
         const response = await fetch(`${context.api_url}/repos/${repository}/milestones/${milestone}`, {
           method: "PATCH",
           headers: {
-            Authorization: token,
+            Authorization: `token ${token}`,
             "Content-Type": "application/json",
           },
           body: JSON.stringify({

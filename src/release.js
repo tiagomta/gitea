@@ -7,7 +7,48 @@ function main(options, action, ...args) {
 export default main;
 
 const actions = {
-    async create(options, ...args) {
-        console.log(options, args);
+    async create(options, tag) {
+      if (!tag) throw new Error("No tag specified");
+      const response = await fetch(`${context.api_url}/repos/${repository}/releases`, {
+        method: "POST",
+        headers: {
+          Authorization: `token ${token}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name: options.name || tag,
+          body: options.body || options.milestone ? await getReleaseInfo(context, options.milestone) : "",
+          tag_name: tag
+        }),
+      });
+    
+      if (!response.ok)
+        throw new Error(`Error creating release: ${response.statusText}`);
+    
+      return response;
     }
+}
+
+async function getReleaseInfo(context, milestone) {
+  const response = await fetch(`${context.api_url}/repos/${repository}/issues?state=all&milestone=${milestone}`, {
+    method: "GET",
+    headers: {
+      Authorization: `token ${token}`,
+      "Content-Type": "application/json",
+    }
+  });
+
+  if (!response.ok)
+    throw new Error(`Error getting issues from milestone ${milestone}: ${response.statusText}`);
+  
+  const issues = await response.json();
+  const types = {};
+  for (let i = 0, len = issues.length; i < len; i++) {
+    const { number, title, labels: [{ name }], pull_request } = issues[i];
+    const type = name.replace("Project/", "");
+    if (!types[type]) types[type] = `## ${type}s\n`;
+    types[type] += `- ${title} #(${number})\n`
+    types[type].push(issues[i]);
+  }
+  return Object.values(types).join("\n");
 }
