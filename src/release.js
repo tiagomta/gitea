@@ -17,7 +17,7 @@ const actions = {
         },
         body: JSON.stringify({
           name: options.name || tag,
-          body: options.body || options.milestone ? await getReleaseInfo(context, options.milestone) : "",
+          body: options.body || options.milestone ? await getMilestoneInfo(options.milestone) : "",
           tag_name: tag
         }),
       });
@@ -29,7 +29,8 @@ const actions = {
     }
 }
 
-async function getReleaseInfo(context, milestone) {
+async function getMilestoneInfo(milestone) {
+  console.log(`${context.api_url}/repos/${repository}/issues?state=all&milestone=${milestone}`);
   const response = await fetch(`${context.api_url}/repos/${repository}/issues?state=all&milestone=${milestone}`, {
     method: "GET",
     headers: {
@@ -42,9 +43,10 @@ async function getReleaseInfo(context, milestone) {
     throw new Error(`Error getting issues from milestone ${milestone}: ${response.statusText}`);
   
   const issues = await response.json();
+  console.log(issues);
   const types = {};
   for (let i = 0, len = issues.length; i < len; i++) {
-    const { number, title, labels: [{ name }], pull_request } = issues[i];
+    const { number, title, labels: [{ name }] } = issues[i];
     const type = name.replace("Project/", "");
     if (!types[type]) types[type] = `## ${type}s\n`;
     types[type] += `- ${title} #(${number})\n`
