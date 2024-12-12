@@ -4,6 +4,8 @@ inputs:
   context:
     description: 'Git context'
     default: ${{ toJson(github) }}
+  working-directory:
+    description: 'Process directory'
   repository:
     description: 'Repository name with owner. For example, actions/checkout'
     default: ${{ github.repository }}

@@ -8,6 +8,8 @@ const commands = { issues, milestone, release };
 
 async function run() {
     try {
+        const directory = core.getInput("working-directory");
+        if (directory) process.chdir(directory);
         const [[command, ...args], options] = parse(core.getInput("command").trim());
         globalThis.context = JSON.parse(core.getInput("context"));
         globalThis.repository = core.getInput("repository");
