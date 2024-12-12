@@ -48,7 +48,6 @@ async function getMilestoneInfo(milestone) {
     const type = name.replace("Project/", "");
     if (!types[type]) types[type] = `## ${type}s\n`;
     types[type] += `- ${title} #(${number})\n`
-    types[type].push(issues[i]);
   }
   return Object.values(types).join("\n");
 }
