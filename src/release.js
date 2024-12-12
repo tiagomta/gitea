@@ -9,6 +9,7 @@ export default main;
 const actions = {
     async create(options, tag) {
       if (!tag) throw new Error("No tag specified");
+      console.log(options.milestone);
       const response = await fetch(`${context.api_url}/repos/${repository}/releases`, {
         method: "POST",
         headers: {
