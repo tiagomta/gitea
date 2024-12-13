@@ -14,6 +14,7 @@ const actions = {
     if (options.issues) issues = options.issues.split(/,;/);
     else if (options.fromCommit) issues = await getIssuesFromCommit();
     else throw new Error("No issues specified");
+    console.log(issues);
     for (let i = 0, len = issues?.length || 0; i < len; i++) {
         try {
             await update(issues[i], { milestone, state: "closed" });
