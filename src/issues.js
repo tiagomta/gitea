@@ -51,6 +51,5 @@ async function getIssuesFromCommit() {
         }
       }
     });
-    console.log(`Commit message: ${commitMessage}`);
-    return commitMessage.match(/\b#(\d+)\b/g);
+    return commitMessage.match(/#(\d+)\b/g);
 }
