@@ -17,7 +17,7 @@ const actions = {
         },
         body: JSON.stringify({
           name: options.name || tag,
-          body: options.body || options.milestone ? await getMilestoneInfo(options.milestone) : "",
+          body: options.body || options.fromMilestone ? await getMilestoneInfo(options.fromMilestone) : "",
           tag_name: tag
         }),
       });
@@ -45,13 +45,11 @@ async function getMilestoneInfo(milestone) {
   const types = {};
   for (let i = 0, len = issues.length; i < len; i++) {
     const { number, title, labels } = issues[i];
-    let type = labels?.[0]?.name?.replace("Project/", "") || "Misc";
-    if (type.startsWith("Release ")) continue;
-    if (type === "Task") type = "Misc";
-    else if (type === "Bug") type = "Bugfixes";
-    else if (type !== "Misc") type = type + "s";
-    if (!types[type]) types[type] = `## ${type}\n`;
-    types[type] += `- ${title} (#${number})\n`
+    for (let i2 = 0, len2 = labels?.length || 0; i2 < len2; i2++) {
+      const name = labels[i2].name;
+      if (!types[name]) types[name] = `## ${name}\n`;
+      types[name] += `- ${title} (#${number})\n`
+    }
   }
   return Object.values(types).join("\n");
 }
