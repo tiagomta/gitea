@@ -17,7 +17,7 @@ const actions = {
     for (let i = 0, len = issues?.length || 0; i < len; i++) {
         try {
             await update(issues[i], { milestone, state: "closed" });
-            console.log(`Issue ${issue} closed successfully with milestone ${milestone}`);
+            console.log(`Issue ${issues[i]} closed successfully with milestone ${milestone}`);
         }
         catch (error) {
             console.error(error.message);
