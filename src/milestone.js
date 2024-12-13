@@ -29,7 +29,7 @@ const actions = {
                     Authorization: `token ${token}`,
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify({ title, milestone: milestone.id }),
+                body: JSON.stringify({ title: milestone, milestone: milestone.id }),
             });
           
             if (!response.ok)
