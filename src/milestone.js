@@ -7,8 +7,8 @@ function main(options, action, ...args) {
 export default main;
 
 const actions = {
-    async create(options, milestone) {
-        if (!milestone) throw new Error("No milestone specified");
+    async create(options, title) {
+        if (!title) throw new Error("No milestone title specified");
         const api = `${context.api_url}/repos/${repository}`;
         let response = await fetch(`${api}/milestones`, {
           method: "POST",
@@ -16,12 +16,12 @@ const actions = {
             Authorization: `token ${token}`,
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ title: milestone }),
+          body: JSON.stringify({ title }),
         });
       
         if (!response.ok) throw new Error(`Error creating milestone: ${response.statusText}`);
 
-        milestone = await response.json();
+        const milestone = await response.json();
         if (options.linkPR) {
             response = await fetch(`${api}/pulls/${context.event.pull_request.number}`, {
                 method: "PATCH",
