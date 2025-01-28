@@ -41,6 +41,7 @@ async function getLabels(api, token, labels) {
       },
     })
   ).json();
+  console.log(response);
   const allLabels = {};
   for (let i = 0; i < response.len; i++)
     allLabels[response[i].name] = response[i].id;
@@ -49,5 +50,5 @@ async function getLabels(api, token, labels) {
     const label = labels[i];
     if (allLabels[label]) result.push(allLabels[label]);
   }
-  return result;
+  return result.length === 0 ? null : result;
 }
