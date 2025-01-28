@@ -11,8 +11,9 @@ const actions = {
     const api = `${context.api_url}/repos/${repository}`;
     const body = { title, base, head };
     if (options.milestone) body.milestone = options.milestone;
-    if (options.labels)
-      body.labels = await getLabels(api, token, options.labels.split(","));
+    const labels = await getLabels(api, token, options?.labels?.split(","));
+    //if (options.labels)
+    //  body.labels = 
     console.log(body);
     const response = await fetch(`${api}/pulls`, {
       method: "POST",
@@ -29,7 +30,7 @@ const actions = {
   },
 };
 
-async function getLabels(api, token, labels) {
+async function getLabels(api, token, labels = []) {
   const len = labels.length;
   if (len === 0) return null;
   const response = await (
@@ -43,7 +44,7 @@ async function getLabels(api, token, labels) {
   ).json();
   console.log(response);
   const allLabels = {};
-  for (let i = 0; i < response.len; i++)
+  for (let i = 0; i < response.length; i++)
     allLabels[response[i].name] = response[i].id;
   const result = [];
   for (let i = 0; i < len; i++) {
