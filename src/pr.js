@@ -14,7 +14,7 @@ const actions = {
     const labels = await getLabels(api, token, options?.labels?.split(","));
     //if (options.labels)
     //  body.labels = 
-    console.log(body);
+    console.log(repository, body);
     const response = await fetch(`${api}/pulls`, {
       method: "POST",
       headers: {
