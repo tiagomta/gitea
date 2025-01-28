@@ -13,6 +13,7 @@ const actions = {
     if (options.milestone) body.milestone = options.milestone;
     if (options.labels)
       body.labels = await getLabels(api, token, options.labels.split(","));
+    console.log(body);
     const response = await fetch(`${api}/pulls`, {
       method: "POST",
       headers: {
