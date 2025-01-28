@@ -10,7 +10,7 @@ const actions = {
     async create(options, title) {
         if (!title) throw new Error("No milestone title specified");
         const api = `${context.api_url}/repos/${repository}`;
-        let response = await fetch(`${api}/milestones`, {
+        const response = await fetch(`${api}/milestones`, {
           method: "POST",
           headers: {
             Authorization: `token ${token}`,
