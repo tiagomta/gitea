@@ -2,9 +2,10 @@ import * as core from "@actions/core";
 import { parse } from "./utils.js";
 import issues from "./issues.js";
 import milestone from "./milestone.js";
+import pr from "./pr.js";
 import release from "./release.js";
 
-const commands = { issues, milestone, release };
+const commands = { issues, milestone, pr, release };
 
 async function run() {
     try {

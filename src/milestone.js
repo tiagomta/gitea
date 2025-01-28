@@ -20,23 +20,7 @@ const actions = {
         });
       
         if (!response.ok) throw new Error(`Error creating milestone: ${response.statusText}`);
-
-        const milestone = await response.json();
-        if (options.linkPR) {
-            response = await fetch(`${api}/pulls/${context.event.pull_request.number}`, {
-                method: "PATCH",
-                headers: {
-                    Authorization: `token ${token}`,
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({ title: milestone, milestone: milestone.id }),
-            });
-          
-            if (!response.ok)
-                throw new Error(`Error assigning milestone to PR: ${response.statusText}`);
-        }
-      
-        return milestone;
+        return (await response.json()).id;
     },
     async close(_, milestone) {
         if (!milestone) throw new Error("No milestone specified");
