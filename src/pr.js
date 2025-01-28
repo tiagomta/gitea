@@ -34,7 +34,7 @@ async function getLabels(api, token, labels) {
   if (len === 0) return null;
   const response = await (
     await fetch(`${api}/labels`, {
-      method: "POST",
+      method: "GET",
       headers: {
         Authorization: `token ${token}`,
         "Content-Type": "application/json",
