@@ -40,11 +40,13 @@ async function getLabels(api, token, labels) {
       },
     })
   ).json();
+  const allLabels = {};
+  for (let i = 0; i < response.len; i++)
+    allLabels[response[i].name] = response[i].id;
   const result = [];
   for (let i = 0; i < len; i++) {
     const label = labels[i];
-    const index = response.findIndex((item) => item.name === label);
-    if (index === -1) continue;
-    result.push(response[index].id);
+    if (allLabels[label]) result.push(allLabels[label]);
   }
+  return result;
 }
