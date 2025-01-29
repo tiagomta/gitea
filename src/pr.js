@@ -12,7 +12,7 @@ const actions = {
     const body = { title, base, head };
     if (options.milestone) body.milestone = options.milestone;
     const labels = await getLabels(context.api_url, repository, token, options?.labels?.split(","));
-    if (labels) body.labels = labels;
+    if (labels.length === 0) body.labels = labels;
     const response = await fetch(`${api}/pulls`, {
       method: "POST",
       headers: {
@@ -50,7 +50,7 @@ async function getLabels(api, repository, token, labels = []) {
   const result = [];
   for (let i = 0; i < len; i++) {
     const label = labels[i];
-    if (allLabels[label]) result.push(allLabels[label]);
+    if (labelNameToId[label]) result.push(labelNameToId[label]);
   }
-  return result.length === 0 ? null : result;
+  return result;
 }
