@@ -11,14 +11,12 @@ const actions = {
     const api = `${context.api_url}/repos/${repository}`;
     const body = { title, base, head };
     if (options.milestone) body.milestone = options.milestone;
-    const labels = await getLabels(api, token, options?.labels?.split(","));
-    //if (options.labels)
-    //  body.labels = 
-    console.log(`${api}/pulls`, body, token);
+    const labels = await getLabels(context.api_url, repository, token, options?.labels?.split(","));
+    if (labels) body.labels = labels;
     const response = await fetch(`${api}/pulls`, {
       method: "POST",
       headers: {
-        Authorization: `token c7fd13e1c08839bc9043c15e897093cef4de9aed`,
+        Authorization: `token ${token}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify(body),
@@ -30,22 +28,25 @@ const actions = {
   },
 };
 
-async function getLabels(api, token, labels = []) {
+async function getLabels(api, repository, token, labels = []) {
   const len = labels.length;
   if (len === 0) return null;
-  const response = await (
-    await fetch(`${api}/labels`, {
-      method: "GET",
-      headers: {
-        Authorization: `token ${token}`,
-        "Content-Type": "application/json",
-      },
-    })
-  ).json();
-  console.log(response);
-  const allLabels = {};
-  for (let i = 0; i < response.length; i++)
-    allLabels[response[i].name] = response[i].id;
+  const labelNameToId = {};
+  const mapLabels = async(url) => {
+    const response = await (
+      await fetch(url, {
+        method: "GET",
+        headers: {
+          Authorization: `token ${token}`,
+          "Content-Type": "application/json",
+        },
+      })
+    ).json();
+    for (let i = 0; i < response.length; i++)
+      labelNameToId[response[i].name] = response[i].id;
+  };
+  await mapLabels(`${api}/repos/${repository}/labels`);
+  await mapLabels(`${api}/orgs/${repository.split("/")[0]}/labels`);
   const result = [];
   for (let i = 0; i < len; i++) {
     const label = labels[i];
