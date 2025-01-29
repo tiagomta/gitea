@@ -18,7 +18,7 @@ const actions = {
     const response = await fetch(`${api}/pulls`, {
       method: "POST",
       headers: {
-        Authorization: `token ${token}`,
+        Authorization: `token c7fd13e1c08839bc9043c15e897093cef4de9aed`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify(body),
